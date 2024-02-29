@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useState } from "react";
 import styled from "styled-components";
@@ -8,6 +9,15 @@ const AddTransaction = ({ setToggle, AddTransactions }) => {
     const [transType, setTransType] = useState("expense");
 
     const AddTransactionData = () => {
+        if (!details.trim()) {
+            alert("Details cannot be empty");
+        }
+
+        if (!/^\d+$/.test(amount)) {
+            alert("Amount should contain only numeric characters");
+            return;
+        }
+
         AddTransactions({
             amount: Number(amount),
             details,
@@ -19,20 +29,29 @@ const AddTransaction = ({ setToggle, AddTransactions }) => {
 
     return (
         <div className="main2">
-            <input className="inp"
+            <input
+                className="inp"
                 placeholder="Enter Amount"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                input />
+                onChange={(e) => {
+                    const input = e.target.value;
+                    if (/^\d*$/.test(input)) {
+                        setAmount(input);
+                    }
+                }}
+                input
+            />
 
-            <input className="inp"
+            <input
+                className="inp"
                 type={"text"}
                 placeholder="Enter Details"
                 value={details}
                 onChange={(e) => setDetails(e.target.value)}
-                input />
+                input
+            />
 
-            <div className="radiob" >
+            <div className="radiob">
                 <div className="rdio">
                     <input
                         type="radio"
@@ -42,7 +61,9 @@ const AddTransaction = ({ setToggle, AddTransactions }) => {
                         checked={transType === "expense"}
                         onChange={(e) => setTransType(e.target.value)}
                     />
-                    <label  className= "lbl"htmlFor="expense">Expense</label>
+                    <label className="lbl" htmlFor="expense">
+                        Expense
+                    </label>
                 </div>
 
                 <div className="rdio">
@@ -54,11 +75,15 @@ const AddTransaction = ({ setToggle, AddTransactions }) => {
                         checked={transType === "income"}
                         onChange={(e) => setTransType(e.target.value)}
                     />
-                    <label className="lbl" htmlFor="income">Budget</label>
+                    <label className="lbl" htmlFor="income">
+                        Budget
+                    </label>
                 </div>
             </div>
 
-            <button className="btn1" onClick={AddTransactionData}>Add Transaction</button>
+            <button className="btn1" onClick={AddTransactionData}>
+                Add Transaction
+            </button>
         </div>
     );
 };
