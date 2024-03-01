@@ -161,3 +161,7 @@
   font-size: 25px;
   font-weight: 600;
 }
+
+.error{
+  color: red;
+}

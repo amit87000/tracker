@@ -1,21 +1,47 @@
 
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const AddTransaction = ({ setToggle, AddTransactions }) => {
     const [amount, setAmount] = useState("");
     const [details, setDetails] = useState("");
     const [transType, setTransType] = useState("expense");
+    const [amountError, setAmountError] = useState("");
+    const [detailsError, setDetailsError] = useState("");
+
+    const handleAmountChange = (e) => {
+        const input = e.target.value;
+        if (/^\d*$/.test(input)) {
+            setAmount(input);
+            setAmountError("");
+        } else {
+            setAmountError("Amount should contain only numeric characters");
+        }
+    };
+
+    const handleDetailsChange = (e) => {
+        const input = e.target.value;
+        if (/^[A-Za-z\s]*$/.test(input)) {
+            setDetails(input);
+            setDetailsError("");
+        } else {
+            setDetailsError("Details should contain only alphabetic characters");
+        }
+    };
 
     const AddTransactionData = () => {
         if (!details.trim()) {
-            alert("Details cannot be empty");
+            setDetailsError("Fields cannot be empty");
+            return;
+        } else {
+            setDetailsError("");
         }
 
         if (!/^\d+$/.test(amount)) {
-            alert("Amount should contain only numeric characters");
+            setAmountError("Amount should contain only numeric characters");
             return;
+        } else {
+            setAmountError("");
         }
 
         AddTransactions({
@@ -33,23 +59,20 @@ const AddTransaction = ({ setToggle, AddTransactions }) => {
                 className="inp"
                 placeholder="Enter Amount"
                 value={amount}
-                onChange={(e) => {
-                    const input = e.target.value;
-                    if (/^\d*$/.test(input)) {
-                        setAmount(input);
-                    }
-                }}
+                onChange={handleAmountChange}
                 input
             />
+            {amountError && <span className="error">{amountError}</span>}
 
             <input
                 className="inp"
                 type={"text"}
                 placeholder="Enter Details"
                 value={details}
-                onChange={(e) => setDetails(e.target.value)}
+                onChange={handleDetailsChange}
                 input
             />
+            {detailsError && <span className="error">{detailsError}</span>}
 
             <div className="radiob">
                 <div className="rdio">
